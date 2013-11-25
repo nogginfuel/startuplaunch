@@ -1,0 +1,197 @@
+<html>
+<body>
+<script>
+
+/*
+
+This is a utility which was created and used to make the compression
+dictionary which is used by the Hoot "build" output script compression
+and decompression.
+
+This is not used by Hoot in any way, but shall remain for posterity
+because it's pretty cool.
+
+It finds strings which repeat themselves in a corpus. Not WORDS, mind you, 
+STRINGS!  :-)
+
+Run this to see the neat output.  You can also uncomment the other
+document.writes in order to see the inner workings of the script.
+
+Warning: it will absolutely blow up your browser if you give it input
+which is too large.  Start with something small and work your way up to
+see what works for you.
+
+Also, the smaller the max_likely_string_len value, the quicker it will
+run, but it won't be able to catch any repeated strings longer than that
+value, so fiddle with it all you like.  There's no sense in making
+max_likely_string_len any bigger than half of your total input string
+because a string longer than half cannot possibly be repeated!
+
+*/
+
+
+
+// some Lord Tennyson to add some culture to this source:
+var corpus = "Half a league, half a league, Half a league onward, All in the valley of Death Rode the six hundred. Forward the Light Brigade! Charge for the guns! he said. Into the valley of Death Rode the six hundred. Forward, the Light Brigade! Was there a man dismay'd? Not tho' the soldier knew Some one had blunder'd. Theirs not to make reply, Theirs not to reason why, Theirs but to do and die. Into the valley of Death Rode the six hundred. Cannon to right of them, Cannon to left of them, Cannon in front of them Volley'd and thunder'd; Storm'd at with shot and shell, Boldly they rode and well, Into the jaws of Death, Into the mouth of hell Rode the six hundred. Flash'd all their sabres bare, Flash'd as they turn'd in air Sabring the gunners there, Charging an army, while All the world wonder'd. Plunged in the battery-smoke Right thro' the line they broke; Cossack and Russian Reel'd from the sabre-stroke Shatter'd and sunder'd. Then they rode back, but not, Not the six hundred. Cannon to right of them, Cannon to left of them, Cannon behind them Volley'd and thunder'd; Storm'd at with shot and shell, While horse and hero fell, They that had fought so well Came thro' the jaws of Death, Back from the mouth of hell, All that was left of them, Left of six hundred. When can their glory fade? O the wild charge they made! All the world wonder'd. Honor the charge they made! Honor the Light Brigade, Noble six hundred!";
+
+// Settings:
+var max_likely_string_len = 100;
+var min_string_len = 3;
+var min_frequency = 3;
+
+var tree = []; // suffix tree
+
+
+// make a suffix tree!
+// =============================================================================
+
+for(var start_letter=0; start_letter<corpus.length; start_letter++){
+    branch = tree;
+    //document.write(corpus.slice(start_letter,start_letter+max_likely_string_len)+"&nbsp; &nbsp; &nbsp; &nbsp; ");
+    for(var i=0; i<max_likely_string_len && start_letter+i < corpus.length; i++){
+        c = corpus[start_letter+i];
+        if(branch[c]){
+            branch[c].count++;
+        }
+        else{
+            branch[c] = {count:1, mybranch:{}};
+        }
+        //document.write(c+"<sup>"+branch[c].count+"</sup>");
+        branch = branch[c].mybranch;
+    }
+    //document.write("<br>");
+}
+
+
+
+// grab the strings!
+// =============================================================================
+
+var strings = {};
+
+function getStrings(tree, prevstr, freq){
+
+    for(c in tree){
+        str = prevstr
+        if(tree[c].count >= min_frequency){
+            str+=c;
+            //document.write("<span style='background-color:#DDD'>"+prevstr+"<sup>"+freq+"</sup> "+str+"<sup>"+tree[c].count+"</sup></span> ");
+            getStrings(tree[c].mybranch, str, tree[c].count);
+        }
+    }
+
+    if(str.length>=min_string_len && strings[str] === undefined){
+        strings[str]=freq;
+        //document.write("<span style='background-color:#BF7'>Done creating: "+str+"<sup>"+freq+"</sup></span><br>");
+    }
+
+    // this if is strictly for document.write display of inner workings
+    //if(str.length<min_string_len){
+    //    document.write("<span style='background-color:#F99'>Too short, discarding: "+str+"</span><br>");
+    //}
+}
+getStrings(tree, "", 0);
+
+
+
+
+// discard smaller strings that are inside of bigger strings
+// =============================================================================
+for(s1 in strings){
+    for(s2 in strings){
+        if(
+            s2 != s1                      // they are NOT the same string
+            && strings[s2] == strings[s1] // they ARE the same freq
+            && s2.length > s1.length      // s2 is larger
+            && s2.indexOf(s1) != -1){     // s2 contains s1
+            //document.write("<span style='background-color:#FACCFA'>'"+s1+"'<sup>"+strings[s1]+"</sup></span> is in <span style='background-color:#CCFACC'>'"+s2+"'<sup>"+strings[s2]+"</sup></span> ");
+            delete strings[s1];           // remove the smaller s1
+            break;
+        }
+    }
+}
+
+
+
+
+// sort them by freq
+// =============================================================================
+function getSortedKeys(obj) {
+    var keys = []; for(var key in obj) keys.push(key);
+    return keys.sort(function(a,b){ return obj[b]-obj[a]; });
+}
+var str_keys = getSortedKeys(strings);
+
+
+
+
+// display them pretty!
+// =============================================================================
+for(s in str_keys){
+
+    color = "FFFFFF";
+    if(strings[str_keys[s]] > 3){  color = "EDF9CB"; } // less
+    if(strings[str_keys[s]] > 4){ color = "E6F7B5"; }
+    if(strings[str_keys[s]] > 5){ color = "D6F67C"; }
+    if(strings[str_keys[s]] > 10){ color = "C3F53A"; }
+    if(strings[str_keys[s]] > 20){ color = "B7F312"; } // more
+
+    document.write("<div style='background-color:#"+color+";border:1px solid black; float: left; margin:.5em; padding:.5em;'>"+str_keys[s].replace(" ","<span style='color:#F0F;>'>_</span>")+"<sup style='background-color:#F9BFF5;border:1px solid black;margin:.5em;padding:.3em'>"+strings[str_keys[s]]+"</sup></div>");
+}
+
+
+
+// display them ugly! (create a dictionary)
+// =============================================================================
+document.write("<hr style='clear:left'>");
+document.write("<p style='font-family:monospace'>");
+for(s in str_keys){
+    document.write("\""+str_keys[s].replace("\"","\\\"","g")+"\", ");
+}
+document.write("</p>");
+
+
+
+
+// =============================================================================
+// utils
+// =============================================================================
+
+
+// find the common entries in two dictionaries
+function intersection(a, b){
+    document.write("<p style='font-family:monospace'><b>Common:</b> ");
+    for(var i=0; i<a.length; i++){
+        for(var j=0; j<b.length; j++){
+            if(a[i]==b[j]){
+                document.write("\""+a[i].replace("\"","\\\"","g")+"\", ");
+            }
+        }
+    }
+    document.write("</p>");
+}
+
+a = ["foo", "aaa"];
+b = ["foo", "bbb"];
+intersection(a,b);
+
+
+// sort a list (most likely list of )
+function sortLongestToShortest(list){
+    return list.sort(function(a,b){ return b.length-a.length; });
+}
+
+list = ["aaaaaa", "b", "ccc", "ddddddddddddddddd"];
+
+sortLongestToShortest(list);
+
+document.write("<p style='font-family:monospace'><b>Len sorted:</b> ");
+for(var i=0; i<list.length; i++){
+    document.write("\""+list[i].replace("\"","\\\"","g")+"\", ");
+}
+document.write("</p>");
+
+
+</script>
+</body>
+</html>

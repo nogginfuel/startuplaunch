@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Hoot - The Hypertext Adventure Game Builder</title>
+
+	<!-- game builder stylesheet -->
+	<link rel="stylesheet" type="text/css" href="hoot.css">
+
+	<script src="lib/jquery-1.7.1.min.js" type="text/javascript"></script>
+	<script src="js/hoot-grammar.js" type="text/javascript"></script>
+	<script src="js/hoot-parser.js" type="text/javascript"></script>
+	<script src="js/hoot-errors.js" type="text/javascript"></script>
+	<script src="js/hoot-prettystruct.js" type="text/javascript"></script>
+	<script src="js/hoot-examplescript.js" type="text/javascript"></script>
+	<script src="js/hoot-builder.js" type="text/javascript"></script>
+	<script src="js/hoot-compressor.js" type="text/javascript"></script>
+	<script src="js/hoot-runtime.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+<div id="layout">
+
+	<div id="code-panel">
+		<h1>Your Game's Hootscript</h1>
+		<textarea id="source">[start]: /Welcome to my game!/</textarea>
+	</div>
+
+
+
+	<div id="output-panel">
+		<div class="tabs">
+			<ul class="tablist">
+				<li class="tab" id="tab_docs">Docs</li>
+				<li class="tab" id="tab_structure">Structure</li>
+				<li class="tab" id="tab_play">Play</li>
+				<li class="tab" id="tab_build">Build</li>
+			</ul>
+		</div>
+
+		<div class="css-blows"> <!-- see hoot.css -->
+
+		<div id="structure" class="tabContent">
+			<h2>The structure of your game</h2>
+			<div class="errorhell"></div>
+			<p>This display shows how Hoot sees your script. This may be helpful for understanding how statements are contained within things and how if/else structures work.</p>
+			<div id="structurearea"></div>
+		</div>
+
+		<div id="build" class="tabContent">
+			<h2>Your game 'build'</h2>
+			<div class="errorhell"></div>
+			<p>When you're ready to distribute your finished game to others, your game is parsed and compressed into what is called a 'build', which will appear here. You'll be copying this code to create a game for distribution.  Please see the <i>Making Games and Distributing Them</i> section under the Docs tab for more information.)</p>
+			<textarea id="buildarea"></textarea>
+			<a href="#" id="buildtest">Playtest this build (Game will display below.)</a>
+		</div>
+
+		<div id="play" class="tabContent">
+			<h2>Play your game</h2>
+			<div class="errorhell"></div>
+			<div id="playarea"></div>
+		</div>
+
+
+		<div id="docs" class="tabContent">
+			<h2>Welcome to Hoot!</h2>
+
+			<img src="hoot-logo.png" alt="Awesome Hoot Owl Logo">
+
+			<p>Hoot stands for Hypertext Once upOn a Time.  It's an adventure game creation tool.  You write adventures in simple Hootscript and Hoot turns your script into a <a href="examplegame.html">game</a> that can be played in any ordinary Web browser.</p>
+
+			<p>You'll be writing your adventure game in a very simple language called Hootscript.  You can see a randomly generated example Hootscript by <a id="generate-script" href="#">clicking here</a> (click again to make a new one!).  Then play the generated example game by clicking the Play tab above.</p>
+
+
+
+			<h2>Hootscript</h2>
+
+			<h3>What is Hootscript?</h3>
+
+			<p>Hootscript is a programming language that has been designed specifically to create text adventure games. You can learn the basics in minutes.  The following is both a tutorial and reference.  By the time you've read everything in these instructions, you'll have made a game and put it into a simple file you can share with others.<p>
+
+			<p>Hootscript was designed for writing stories with lots of text.  It may look a little strange in these short examples, but hopefully the syntax quickly makes sense as you begin to create real text adventures.</p>
+
+
+
+			<h3>Things</h3>
+
+			<p>Hoot games are made up of things.  You make a thing by putting the name of the thing in square brackets followed by a colon like so:</p>
+
+			<pre class="snippet">[this is a thing]:			</pre>
+
+			<p>Anything that comes after the colon is the stuff in the thing.  [start] is a special thing because it is always the first thing that is run when the game begins.  If you don't have a [start] thing, your game can't start!</p>
+
+
+
+			<h3>Displaying Text</h3>
+
+			<p>A text adventure game isn't much good without text. To display some text, simply put it between a pair of slashes like so:
+
+			<pre class="snippet">/I am text that will display./</pre>
+
+
+
+			<h3>Your First Hootscript!</h3>
+
+			<p>Now that you know about the [start] thing and displaying text, you're ready to create your first complete Hootscript.  Delete all of the script to the right and then type the following:</p>
+
+			<pre>[start]: /Hello world!/</pre>
+
+			<p>Then click on the Play tab and you'll see your text.  It's not much of a game, but it was certainly easy, right?</p>
+
+			<p>By the way, you can have as many bits of display text within a thing as you want.  So this is totally fine:</p>
+
+			<pre>[start]:
+  /Hello /
+  /my /
+  /name /
+  /is /
+  /Mr. Hoot!/</pre>
+
+
+
+
+			<h3>Links</h3>
+
+			<p>A game needs interaction. You play a Hoot game by clicking on links.  A link always points to a thing.  To create a link, just type the name of a thing between a pair of underscores in a section of display text like so:</p>
+
+			<pre class="snippet">/This is text with a link to a _thing_./ </pre>
+
+			<p>Let's try making one now.  We'll modify the [start] thing you've already created to include a link to a thing.  Then we'll create the thing!  Here it is:</p>
+
+			<pre>[start]: /Hello _world_!/ 
+[world]: /I am the entire planet!/</pre>
+
+			<p>From now on, when you see a code example like this, just remember that you can run it using the Play tab above.  If you want to change your script and re-run it, just click on the Play tab again (even if it's already selected) and your game will be rebuilt and will start over at the beginning with your new script.</p>
+
+			<p>Now might also be a fun time to take a look at your little two line script with the Structure tab.  Click on that to see how Hoot sees your Hootscript.</p>
+
+
+
+			<h3>Variables (Storing Numbers)</h3>
+
+			<p>Sometimes it's helpful to keep track of things in a game.  For example, you could keep track of the number of times a person as taken an apple from a basket.  Hootscript has variables for keeping track of numbers.  It's very simple, but there's really no limit to what you can do by keeping track of numbers.</p>
+
+			<p>To store a number in a variable, you use the set command.  In this example, the number 2 is being stored in a variable called "apple count".  Variable names go in square brackets just like the names of things.</p>
+
+			<pre class="snippet">set [apple count] to 2</pre>
+
+			<p>To display a variable, simply include it in a piece of display text like so:</p>
+
+			<pre class="snippet">/I have [apple count] apples./</pre>
+
+			<p>Let's give it a try with a really simple new Hootscript:</p>
+
+			<pre>[start]:
+set [number of sheep] to 8
+/There are [number of sheep] sheep in the pasture./</pre>
+
+
+
+			<h3>Doing Things With Variables</h3>
+
+			<p>You can manipulate variables by increasing or decreasing the numbers stored in them or setting them to new numbers. Here is an example:</p>
+
+			<pre>[start]:
+set [a] to 1
+set [b] to 2
+/A is [a] and B is [b]. /
+increase [a]
+decrease [b]
+/(Now A is [a] and B is [b].) /
+set [a] to 15
+/(Now A is [a].)/</pre>
+
+
+
+
+			<h3>Making Decisions (if then else end)</h3>
+
+			<p>Finally, we get to the heart of adding logic to your game.  Hootscript uses the traditional programming concept of an "if statement".  It's very simple and is best explained with a brief playable example:</p>
+
+			<pre>[start]:
+set [the gate is locked] to 1
+/There is a dark wooden gate in front of you. You can _try the handle_./
+
+[try the handle]:
+if [the gate is locked] equals 1 then
+  /Sorry, the gate is locked.  You can _unlock it_./
+else
+  /The gate is unlocked, you can open it and go through./
+end
+
+[unlock it]:
+set [the gate is locked] to 0
+/You unlock the gate with the ancient brass key.  You can _try the handle_ again./
+</pre>
+
+			<p>Try it now to see how it works! Not riveting gameplay, perhaps.  But you get the idea.<p>
+
+			<p>You can have an if without an else, but not an else without an if.  There are also other tests you can perform:</p>
+
+			<pre>[start]:
+set [a] to 4
+if [a] equals 1 then /a is 1 / end
+if [a] greater than 3 then /a is greater than 3 / end
+if [a] less than 3 then /a is less than 3 / end
+if [a] doesn't equal 3 then /a is not equal to 3 / end
+if [a] equals [b] then /a equals b / end </pre>
+
+
+			<p>You now know more than enough to create an excellent adventure.  Play around a little bit and try creating some simple stories and situations.  If you wish to learn more, there are a few additional odds and ends you can use to improve your games below.  Also below are instructions for creating a permenant and customizable copy of your games which you can easily distribute to other people to play.</p>
+
+
+
+			<h3>Odds and Ends</h3>
+
+			<p>To split up multiple paragraphs of display text, simply use a pair of underscores like so:</p>
+
+			<pre>[start]:/First paragraph.__Second paragraph./</pre>
+
+			<p>Hootscript is what we programmers refer to as "non-whitespace sensitive", meaning that you could also write the above as:</pre>
+
+			<pre>[start]:
+	/First paragraph.
+	__
+	Second paragraph./</pre>
+
+			<p>Speaking of sensitivity, Hootscript's things and variables are not case sensitive.  That means that the following script will run just fine:</p>
+
+			<pre>[start]: /You should _yell REALLY LOUDLY_!/
+
+[yell really loudly]:
+  set [Yell Volume] to 11
+  /Aaaaaah!!! Yelling at volume [yeLL vOlUmE]!/</pre>
+
+			<p>Which is a good thing, because sometimes you need to capitalize text, like when it's at the beginning of a sentence.</p>
+
+			<p>Here's a neat trick: you can include a thing inside the display text of another thing.  This is best explained with an example, so here's one - try it to see what it does:</p>
+
+			<pre>[start]: /The [animal] is large./
+[animal]: /elephant/ </pre>
+
+			<p>And remember how I mentioned needing to capitalize things at the beginning of a sentence? Well, you can do that with included things using the special ^ operator like this:</p>
+
+			<pre>[start]: /^[animal]s are large./
+[animal]: /elephant/ </pre>
+
+			<p>You can even display a thing inside itself!  This is a form of what is called 'recursion'.  Feel free to try it, but be warned: if you don't know how to do it properly you'll probably blow up your browser. :-)</p>
+
+			<p>Speaking of using things from other things, you can also explicitly run a thing with the run command like so:</p>
+
+			<pre>[start]: /Pick the _red balloon_ or the _blue balloon_./
+[red balloon]: /The red one reminds you of a song. / run [balloons]
+[blue balloon]: /The blue one is clearly better. / run [balloons]
+[balloons]: /You grab it and run into the forest with a squeal of delight!/</pre>
+
+			<p>Being able to run and display other things is an extremely powerful ability when combined with number variables.  The only limit is your imagination.  For example, here's the traditional 99 Bottles of Beer problem solved in Hootscript (uses recursion):</p>
+
+			<pre>[start]:
+  set [bottle count] to 99
+  /Let's _drink and sing_./
+
+
+[drink and sing]:
+  /^[count] bottle[s] of beer on the wall, [count] bottle[s] of beer. /
+  if [bottle count] greater than 0 then
+    decrease [bottle count]
+    /Take one down and pass it around, [count] bottle[s] of beer on the wall.__/
+    run [drink and sing]
+  else
+    /Go to the store and buy some more, 99 bottles of beer on the wall./
+  end
+
+[count]: if [bottle count] equals 0 then /no more/ else /[bottle count]/ end
+
+[s]: if [bottle count] equals 1 then // else /s/ end		</pre>
+
+			<p>Variables are global.  This means that you can create a variable in one thing and test it and modify it in another thing.</p>
+
+
+			<h3>Making Games and Distributing Them</h3>
+
+			<p>Before you start creating a real masterpiece, I highly recommend saving your game's Hootscript periodically in a text file.  Don't trust all of your hard work to a browser - it will only end in tears!</p>
+
+			<p>Use a text editor, not a word processor (Microsoft Word, for example, saves text with "smart quotes" which may cause display issues with your game for some people).  Notepad (Windows) and TextEdit (Mac) are fine. You'll probably wish to develop your game in a text editor and paste it into Hoot to run it.  That way, your latest copy of the game script is always saved in a text file.</p>
+
+			<p>Start small!  It's easy (especially when writing an adventure game with many paths) to start working on something big right away. There's nothing wrong with a big game. But you should try to build it a little bit at a time.  Play through your game as you build it.  This will help avoid bugs that are difficult to find.  It will also force you to play through your game a lot - which is called 'play testing' and is very important for a quality game.</p>
+
+			<p>Once you're ready to share your game with others, follow these steps:</p>
+
+			<ol>
+				<li>Find the text editor for your system, not a word processor.  Do a web search for "text editor" if you're not sure.</li>
+				<li>Open <a href="examplegame.html">this example game html</a> file with your text editor.  (You can save it from your web browser of you didn't download Hoot to your computer.)</li>
+				<li>Click on the Build tab above.  Copy the your game code.</li>
+				<li>Replace everything between <pre class="snippet">// --------------------------------------------------------------------
+// -------------------- Your game code goes below! --------------------</pre>
+				and
+				<pre class="snippet">// -------------------- Your game code goes above! --------------------
+// --------------------------------------------------------------------</pre>
+				with your game code.</li>
+				<li>Save the HTML document and open it in your browser.  There's your game!</li>
+				<li>You can change the appearance of the game page by editing the CSS styles at the top of the document or any of the HTML.  There are lots of great free tutorials out there which will teach you the basics!</li>
+				<li>Your game is now a single playable file, ready to be distributed and played by others!</li>
+			</ol>
+
+
+
+			<h3>About Hoot</h3>
+
+			<p>This is version 1.4</p>
+
+			<p>Hoot is Copyright 2013 <a href="http://ratfactor.com">Dave Gauer</a>. It is released free and open under the <a href="http://en.wikipedia.org/wiki/MIT_License">MIT License</a>.  Get the latest copy, view the source, or contribute at <a href="https://bitbucket.org/ratfactor/hoot">Bitbucket</a>.</p>
+
+		</div> <!-- /docs -->
+
+		</div> <!-- /.css-blows -->
+
+	</div> <!-- /#output-panel -->
+</div> <!-- /#layout -->
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+
+/* Styles for game builder 
+
+TODO: put all of this in some order and comment it
+
+*/
+
+html, body { 
+	height: 100%; 
+	background-color: #E8ECF2; 
+	color: #0A3300;
+	font-size: 1.1em;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+h2 {
+	margin-top: 0;
+	text-align: center;
+}
+
+h3 {
+	color: #FCE17A;
+}
+
+a, a:visited, a:active { color: #A7C0E5; }
+
+a:hover { color: #A8CBFF; }
+
+
+
+#layout { 
+	height: 100%; 
+}
+
+#code-panel {  
+	width: 59%; 
+	height: 95%; 
+	float:right; 
+	padding: 0; 
+	margin: 0; 
+}
+
+#code-panel h1{
+	font-size: 1.5em;
+	color: #C6C3BF;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+
+
+#output-panel { 
+	width: 39%; 
+	float: left; 
+	padding: 0; 
+	height: 100%;
+}
+
+
+/*  This class (and extraneous div tag) shouldn't have to exist
+    at all, but for some insane reason, the designers of CSS decided that
+    it shouldn't account for margins or borders or EVEN PADDING
+    anything when calculating height! */
+.css-blows { 
+	max-height: 95%;
+	overflow: auto; 
+}
+
+
+
+#output-panel .tabContent { 
+	padding: 1em; 
+	background-color: #5878A6;
+	color: #FFFBF4;
+}
+
+
+ul.tablist { 
+	padding: 0; 
+	list-style: none; 
+	margin: 0; 
+}
+
+
+ul.tablist li {              /* unselected tab */
+	display: inline-block; 
+	margin: 0 0 0 .5em; 
+	padding: .2em .6em; 
+	cursor: pointer; 
+	position: relative;
+	background-color: #B6B8BC;
+	color: #FFFFFF;
+}
+
+ul.tablist li.selected {      /* selected tab */
+	background-color: #5878A6; 
+	border-bottom-color: #5878A6;
+	color: #FFFFFF;
+}
+
+ul.tablist li:hover {
+	color: #A7C0E5;
+	background-color: #5878A6; 
+}
+
+
+
+
+.errorhell { /* error area */
+	background-color: #FFF;
+	color: #A60000;
+	padding: 1em; 
+	display: none; 
+	font-family: monospace;
+	line-height: 1.5em;
+}
+.errorhell u { /* the snippet of bad code */
+	background-color: #A60000; 
+	border: 1px solid #F2C1C1;
+	color: #FFFFFF;
+	text-decoration: none; 
+	font-weight: bold;
+	padding: 1px;
+	white-space: nowrap;
+}
+.errorhell i { /* ellipsis to show snippet boundaries and returns */
+	font-style: normal;
+	color: #F2C1C1;
+	font-weight: normal;
+}
+.errorhell b { /* a correct code example */
+	background-color: #C9F76F; 
+	border: 1px solid #679B00;
+	color: #000;
+	font-style: normal;
+	font-weight: bold;
+	padding: 1px;
+	white-space: nowrap;
+}
+
+
+#docs pre {
+	font-size: .9em;
+	max-width: 100%;
+	overflow: auto;
+	background-color: #1D3D6C;
+	padding: .4em;
+	border: 2px solid #9CB2D3;
+}
+
+#docs pre.snippet {
+	background-color: transparent;
+	border: none;
+}
+
+#docs img {
+	display: block;
+	margin: auto;
+}
+
+
+#structurearea {
+	font-size: .9em;
+}
+
+
+#buildarea {
+	width: 100%;
+	height: 400px;
+}
+
+
+
+#playarea {
+	background-color: #1D3D6C;
+	padding: 1em;
+	border: 2px solid #9CB2D3;
+}
+
+#playarea hr { 
+	width: 100px; 
+	border-style: none; 
+	border-top: 1px dashed #999; 
+	margin: 1em auto 1em auto; 
+}
+
+
+
+
+textarea#source {
+	background-color: transparent;
+	color: #0A3300;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: none;
+	resize: none;
+	font-size: 1em;
+	border-top: 1px solid #C6C3BF;
+}
+
+/* ========================================================================== */
+
+/* displaying pretty structure styles */
+
+.disp-func { border: 2px solid #9CB2D3; margin-bottom: 1em; }
+.disp-func .funcname { font-weight: bold; color: #FFF; background-color: #9CB2D3; display: block; padding: .1em; }
+.disp-func-inner { padding:.3em; }
+.disp-if { border: 2px solid #7695C4; }
+.disp-if-test { background-color: #7695C4; display: block; padding: .1em; }
+.disp-if-inner { padding:.5em; }
+.disp-unk { background-color: red; }
+.disp-print u { color: #A7C0E5; }
+.disp-print b { color: #A7C0E5; }
+.disp-statement { background-color: #819ECA; display: inline-block; padding: .1em; margin: .2em; }
+.disp-var { font-weight: bold; color:#C0ED00; }
